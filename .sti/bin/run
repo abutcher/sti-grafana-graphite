@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 #
 # S2I run script for the 'grafana-graphite' image.
@@ -7,5 +7,21 @@
 # For more information see the documentation:
 #	https://github.com/openshift/source-to-image/blob/master/docs/builder_image.md
 #
+
+if [ -n "$GRAPHITE_URL" ]; then
+    echo "GRAPHITE_URL is $GRAPHITE_URL"
+    DATE=$(date "+%Y-%m-%d %H:%M:%S")
+    /usr/bin/sqlite3 /usr/share/grafana/data/grafana.db "insert into data_source (org_id,version,type,name,access,url,password,user,database,basic_auth,basic_auth_user,basic_auth_password,is_default,json_data,created,updated) values (1,0,'graphite','Graphite','direct','${GRAPHITE_URL}',null,null,null,0,null,null,1,null,'${DATE}','${DATE}')"
+else
+    echo "GRAPHITE_URL is empty"
+fi
+
+for file in `find /etc/openshift/dashboards/ -name "*.json"`; do
+    DATE=$(date "+%Y-%m-%d %H:%M:%S")
+    TITLE=$(python -c "import json; print json.load(open('${file}'))['title'];")
+    SLUG=$(basename $file .json)
+    DATA=$(cat $file | tr -d "\n")
+    /usr/bin/sqlite3 /usr/share/grafana/data/grafana.db "insert into dashboard (version,slug,title,data,org_id,created,updated) values (0,'${SLUG}','${TITLE}','${DATA}',1,'${DATE}','${DATE}')"
+done
 
 /usr/sbin/grafana-server -config="/usr/share/grafana/conf/defaults.ini" -homepath="/usr/share/grafana/"

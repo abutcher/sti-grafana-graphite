@@ -10,7 +10,12 @@ LABEL io.k8s.description="Grafana w/ Graphite Backend" \
       io.openshift.s2i.scripts-url="image:///usr/local/sti"
 
 RUN yum install -y https://grafanarel.s3.amazonaws.com/builds/grafana-2.0.2-1.x86_64.rpm && yum clean all -y
+
+COPY grafana.db /usr/share/grafana/data/
 RUN chown -R 1001:1001 /usr/share/grafana/
+
+RUN mkdir -p /etc/openshift/dashboards
+RUN chown -R 1001:1001 /etc/openshift/dashboards
 
 COPY ./.sti/bin/ /usr/local/sti
 

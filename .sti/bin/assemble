@@ -22,7 +22,7 @@ if [ "$(ls /tmp/artifacts/ 2>/dev/null)" ]; then
 fi
 
 echo "---> Installing application source"
-cp -Rf /tmp/src/. /usr/share/grafana/public/dashboards/
+cp -Rf /tmp/src/. /etc/openshift/dashboards/
 
 echo "---> Building application from source"
 # TODO: Add build steps for your application, eg npm install, bundle install
