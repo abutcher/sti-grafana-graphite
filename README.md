@@ -10,7 +10,7 @@ source is configured by running the resultant image with a
 
 ## Source to Image
 
-The first thing you need to do is build the grafana-graphite imagge.
+The first thing you need to do is build the grafana-graphite image.
 
 ```
 make build
