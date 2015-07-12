@@ -27,7 +27,7 @@ sti build https://github.com/abutcher/dash-test.git grafana-graphite dash-test
 ```
 docker run -p 3000:3000 \
            -e GRAPHITE_URL=https://my-graphite-web.example.com/ \
-	   -d dash-test
+           -d dash-test
 ```
 
 ## Testing
