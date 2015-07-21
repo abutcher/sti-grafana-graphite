@@ -1,4 +1,3 @@
-
 #!/bin/bash -e
 #
 # S2I assemble script for the 'grafana-graphite' image.
@@ -21,8 +20,5 @@ if [ "$(ls /tmp/artifacts/ 2>/dev/null)" ]; then
   mv /tmp/artifacts/. ./
 fi
 
-echo "---> Installing application source"
+echo "---> Installing dashboards"
 cp -Rf /tmp/src/. /etc/openshift/dashboards/
-
-echo "---> Building application from source"
-# TODO: Add build steps for your application, eg npm install, bundle install

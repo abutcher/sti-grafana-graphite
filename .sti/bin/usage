@@ -1,4 +1,3 @@
-
 #!/bin/bash -e
 cat <<EOF
 This is the grafana-graphite S2I image:
@@ -9,5 +8,6 @@ Sample invocation:
 sti build git://<source code> grafana-graphite <application image>
 
 You can then run the resulting image via:
-docker run <application image>
+
+docker run -p 3000:3000 -e GRAPHITE_URL=<graphite data source> -d <application image>
 EOF

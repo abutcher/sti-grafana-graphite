@@ -24,4 +24,4 @@ USER 1001
 
 EXPOSE 3000
 
-CMD ["base-usage"]
+CMD ["usage"]
