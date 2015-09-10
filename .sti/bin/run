@@ -1,13 +1,5 @@
 #!/bin/bash
 
-#
-# S2I run script for the 'grafana-graphite' image.
-# The run script executes the server that runs your application.
-#
-# For more information see the documentation:
-#	https://github.com/openshift/source-to-image/blob/master/docs/builder_image.md
-#
-
 if [ -n "$GRAPHITE_URL" ]; then
     echo "GRAPHITE_URL is $GRAPHITE_URL"
     DATE=$(date "+%Y-%m-%d %H:%M:%S")
@@ -17,10 +9,11 @@ else
 fi
 
 for file in `find /etc/openshift/dashboards/ -name "*.json"`; do
+    echo "Processing... ${file}"
     DATE=$(date "+%Y-%m-%d %H:%M:%S")
     TITLE=$(python -c "import json; print json.load(open('${file}'))['title'];")
     SLUG=$(basename $file .json)
-    DATA=$(cat $file | tr -d "\n")
+    DATA=$(python -c "print ' '.join(open('${file}').read().split()).replace('\n','').replace('\'','\\\\\"')")
     /usr/bin/sqlite3 /usr/share/grafana/data/grafana.db "insert into dashboard (version,slug,title,data,org_id,created,updated) values (0,'${SLUG}','${TITLE}','${DATA}',1,'${DATE}','${DATE}')"
 done
 

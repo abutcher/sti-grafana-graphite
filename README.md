@@ -8,6 +8,16 @@ in json format and preloads them into grafana. The graphite data
 source is configured by running the resultant image with a
 `GRAPHITE_URL` environment variable.
 
+## Openshift
+
+Add templates to the `openshift` namespace making them available to
+users to create as an instant app.
+
+```
+oc create -f imagestream.json -n openshift
+oc create -f app_template.json -n openshift
+```
+
 ## Source to Image
 
 The first thing you need to do is build the grafana-graphite image.
@@ -22,7 +32,7 @@ Next, combine that image with your source.
 sti build https://github.com/abutcher/dash-test.git grafana-graphite dash-test
 ```
 
-## Running
+## Running Locally
 
 ```
 docker run -p 3000:3000 \
